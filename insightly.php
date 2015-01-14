@@ -307,7 +307,8 @@ class Insightly{
 
   public function addEvent($event){
     if($event == "sample"){
-      return $this->getEvents(array("top" => 1))[0];
+      $result=$this->getEvents(array("top" => 1));	
+      return $result[0];
     }
 
     $url_path = "/v2.1/Events";
@@ -336,7 +337,8 @@ class Insightly{
 
   public function addFileCategory($category){
     if($category == "sample"){
-      return $this->getFileCategories()[0];
+      $result=$this->getFileCategories();	
+      return $result[0];
     }
 
     $url_path = "/v2.1/FileCategories";
@@ -367,7 +369,8 @@ class Insightly{
 
   public function addNote($note){
     if($note == "sample"){
-      return $this->getNotes(array("top" => 1))[0];
+      $result=$this->getNotes(array("top" => 1));	
+      return $result[0];
     }
 
     $url_path = "/v2.1/Notes";
@@ -416,7 +419,8 @@ class Insightly{
 
   public function addOpportunity($opportunity){
     if($opportunity == "sample"){
-      return $this->getOpportunities(array("top" => 1))[0];
+      $result=$this->getOpportunities(array("top" => 1));	
+      return $result[0];
     }
 
     $url_path = "/v2.1/Opportunities";
@@ -462,7 +466,8 @@ class Insightly{
 
   public function addOpportunityCategory($category){
     if($category == "sample"){
-      return $this->getOpportunityCategories()[0];
+      $result=$this->getOpportunityCategories();	
+      return $result[0];
     }
 
     $url_path = "/v2.1/OpportunityCategories";
@@ -497,7 +502,8 @@ class Insightly{
 
   public function addOrganization($organization){
     if($organization == "sample"){
-      return $this->getOrganizations(array("top" => 1))[0];
+   	  $result=$this->getOrganizations(array("top" => 1));
+      return $result[0];
     }
 
     $url_path = "/v2.1/Organisations";
@@ -554,7 +560,8 @@ class Insightly{
 
   public function addProjectCategory($category){
     if($category == "sample"){
-      return $this->getProjectCategories()[0];
+      $result=$this->getProjectCategories();	
+      return $result[0];
     }
 
     $url_path = "/v2.1ProjectCategories";
@@ -606,7 +613,8 @@ class Insightly{
 
   public function addProject($project){
     if($project == "sample"){
-      return $this->getProjects()[0];
+      $result=$this->getProjects();	
+      return $result[0];
     }
 
     $url_path = "/v2.1/Projects";
@@ -654,7 +662,7 @@ class Insightly{
       foreach($options["ids"] as $id){
         $ids .= $id . ",";
       }
-      $request.queryParam("ids", $ids);
+      $request->queryParam("ids", $ids);
     }
 
     return $request->asJSON();
@@ -666,7 +674,8 @@ class Insightly{
 
   public function addTask($task){
     if($task == "sample"){
-      return $this->getTasks(array("top" => 1))[0];
+      $result=$this->getTasks(array("top" => 1));	
+      return $result[0];
     }
 
     $url_path = "/v2.1/Tasks";
@@ -705,7 +714,8 @@ class Insightly{
 
   public function addTeam($team){
     if($team == "sample"){
-      return $this->getTeams(array("top" => 1))[0];
+      $result=$this->getTeams(array("top" => 1));	
+      return $result[0];
     }
 
     $url_path = "/v2.1/Teams";
@@ -1485,6 +1495,10 @@ class InsightlyRequest{
     default: throw new Exception('Invalid HTTP method: ' . $method);
     }
 
+    // SSL cert issues
+    curl_setopt($this->curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($this->curl, CURLOPT_SSL_VERIFYHOST, false);
+    
     // Have curl return the response, rather than echoing it
     curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
   }
@@ -1528,7 +1542,7 @@ class InsightlyRequest{
 
     $errno = json_last_error();
     if($errno != JSON_ERROR_NONE){
-      throw new Exception("Error encountered decoding JSON: " . json_last_error_msg());
+      throw new Exception("Error encountered decoding JSON: " . json_last_error());
     }
 
     return $data;
@@ -1546,7 +1560,7 @@ class InsightlyRequest{
 
     $errno = json_last_error();
     if($errno != JSON_ERROR_NONE){
-      throw new Exception("Error encountered encoding JSON: " . json_last_error_message());
+      throw new Exception("Error encountered encoding JSON: " . json_last_error());
     }
 
     curl_setopt($this->curl, CURLOPT_POSTFIELDS, $data);
